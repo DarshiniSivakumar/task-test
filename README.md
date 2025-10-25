@@ -68,3 +68,8 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `npm run build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## API Integration Notes
+
+- API calls are implemented using **Redux-Saga**.
+- You may see **Network Error** in the app due to **CORS restrictions** or temporary server downtime.
+- Functionality has been verified via **Postman**, and the app works with the provided API endpoint.
