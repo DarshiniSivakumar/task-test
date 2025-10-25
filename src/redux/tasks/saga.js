@@ -7,15 +7,8 @@ import {
   addTaskRequest,
   addTaskSuccess,
   addTaskFailure,
-  toggleCompleteRequest,
-  toggleCompleteSuccess,
-  toggleCompleteFailure,
-  deleteTaskRequest,
-  deleteTaskSuccess,
-  deleteTaskFailure,
 } from "./taskSlice";
 
-// Replace with your API endpoint
 const API_URL = "https://testing-php-deployment-cyfdejgndfeeg6c5.northeurope-01.azurewebsites.net/tasks";
 
 // Fetch tasks
@@ -31,39 +24,16 @@ function* fetchTasksSaga() {
 // Add task
 function* addTaskSaga(action) {
   try {
-    const response = yield call(axios.post, API_URL, { text: action.payload });
+    const response = yield call(axios.post, API_URL, { text: action.payload, completed: false });
     yield put(addTaskSuccess(response.data));
+    // Optionally fetch tasks again
+    yield put(fetchTasksRequest());
   } catch (error) {
     yield put(addTaskFailure(error.message));
   }
 }
 
-// Toggle complete
-function* toggleCompleteSaga(action) {
-  try {
-    const { id, completed } = action.payload;
-    const response = yield call(axios.put, `${API_URL}/${id}`, { completed });
-    yield put(toggleCompleteSuccess(response.data));
-  } catch (error) {
-    yield put(toggleCompleteFailure(error.message));
-  }
-}
-
-// Delete task
-function* deleteTaskSaga(action) {
-  try {
-    const id = action.payload;
-    yield call(axios.delete, `${API_URL}/${id}`);
-    yield put(deleteTaskSuccess(id));
-  } catch (error) {
-    yield put(deleteTaskFailure(error.message));
-  }
-}
-
-// Watcher saga
-export default function* taskSaga() {
+export default function* rootSaga() {
   yield takeEvery(fetchTasksRequest.type, fetchTasksSaga);
   yield takeEvery(addTaskRequest.type, addTaskSaga);
-  yield takeEvery(toggleCompleteRequest.type, toggleCompleteSaga);
-  yield takeEvery(deleteTaskRequest.type, deleteTaskSaga);
 }
